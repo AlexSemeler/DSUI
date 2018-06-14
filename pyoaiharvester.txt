@@ -1,0 +1,4 @@
+O script pyoaiharvester Foi desenvolvido por Mark Phillips para análise coleta de colecões em repositórios OAI-PMH
+
+Está diponível no repositório:
+https://github.com/vphill/pyoaiharvester/blob/master/pyoaiharvest.py
