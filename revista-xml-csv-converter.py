@@ -1,7 +1,8 @@
-# coding: utf-8
+# -*- coding: utf-8 -*-
 """
-Created on Jun 29 2018
-
+Created on Apr 15 2018
+@author: Alexandre Ribas Semeler
+@author: Adilson Luiz Pinto
 @author: Arthur L. Oliveira
 """
 
