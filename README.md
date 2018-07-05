@@ -3,7 +3,7 @@
   Projeto vinculado ao estágio pós-doutoral Pnpd/CAPES junto ao PGCIN-UFSC</p>
 <p>Autor: Alexandre Ribas Semeler<br />
   Supervisão: Adilson Luiz Pinto<br />
-  Bolsita de Computação: Arthur L. Oliveira<br />
+  Bolsista de Computação: Arthur L. Oliveira<br />
   ------------------------------<br />
   Objetivo: Explorar técnicas de Coleta, Manipulação e e Visualização de Metadados dos Repositórios Institucionais Brasileiros <br />
   para criação de um serviços de avaliação e monitoramento de produção científica nacional<br />
