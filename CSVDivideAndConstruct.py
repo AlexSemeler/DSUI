@@ -85,4 +85,3 @@ else:
         ocurrence_counter.write('%s - %d\n' % (item, setNameList[item]))
     ocurrence_counter.close()
     errors.close()                                          # fecha log de erros
-# print 'Extraction successfully finished to CollectionList.csv, located at output_files folder'
