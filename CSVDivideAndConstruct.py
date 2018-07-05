@@ -43,8 +43,8 @@ else:
 
     with open('xml_error_log.txt', 'w') as errors:  # txt para escrever log de erros
         csv_folder = '../Data Science/output_csvs/'
-        print 'Begin of extraction:', len(line_list)-2, 'URLs to extract'
-        for j in range(1, len(line_list) - 1):                                  # percorre linhas do csv bufferizado
+        print 'Begin of extraction:', len(line_list)-1, 'URLs to extract'
+        for j in range(1, len(line_list)):                                  # percorre linhas do csv bufferizado
             try:
                 url = line_list[j].split('\t')[0]           # extrai url da linha de csv
                 # abre csv de output para escrita:
@@ -66,7 +66,8 @@ else:
                             output_csv.write('request\tSetSpec\n')  # escreve headers
                             output_csv.write('%s\t%s\n' % (a_set[0], a_set[1]))
                             output_csv.close()                  # fecha csv de output
-            except requests.ReadTimeout:                    # tratamento de exceptions
+
+            except requests.ReadTimeout:                        # tratamento de exceptions
                 print 'Connection timeout with %s' % url
                 errors.write('Connection timeout with %s\n' % url)
             except requests.exceptions.ConnectionError:
@@ -79,5 +80,9 @@ else:
                 print 'No connection adapters found for %s.\n Check url for errors.' % url
                 errors.write('Connection error with: %s\n' % url)
 
+    ocurrence_counter = codecs.open('SetNameOcurrences.txt', 'w', 'utf-8-sig')
+    for item in setNameList:
+        ocurrence_counter.write('%s - %d\n' % (item, setNameList[item]))
+    ocurrence_counter.close()
     errors.close()                                          # fecha log de erros
 # print 'Extraction successfully finished to CollectionList.csv, located at output_files folder'
