@@ -40,7 +40,7 @@ else:
     line_list = source.readlines()                                  # bufferiza csv
     source.close()                                                  # fecha csv
     setNameList = Counter()
-
+    chars_to_remove = ['/', '\\', '?', '%', '*', ':', '|', '"', '<', '>', '.']
     with open('xml_error_log.txt', 'w') as errors:  # txt para escrever log de erros
         csv_folder = '../Data Science/output_csvs/'
         print 'Begin of extraction:', len(line_list)-1, 'URLs to extract'
@@ -53,7 +53,6 @@ else:
                 if set_list:                                # trata lista caso ela exista
                     for a_set in set_list:                  # trata cada tripla para escrita no csv de output
                         csv_name = '%s' % a_set[2]
-                        chars_to_remove = ['/', '\\', '?', '%', '*', ':', '|', '"', '<', '>', '.']
                         for char in chars_to_remove:
                             csv_name = csv_name.replace(char, '-')
                         setNameList[a_set[2]] += 1
