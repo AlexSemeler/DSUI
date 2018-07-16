@@ -69,3 +69,4 @@
   Dspace <br />
   <a href="https://github.com/AlexSemeler/DSUI/blob/master/converte-xml-csv.py">https://github.com/AlexSemeler/DSUI/blob/master/converte-xml-csv.py</a><br />
 </p>
+ 5.2 Verificar erros de ortografia, digitação nos metadados creator, subject e etc.  <br />
