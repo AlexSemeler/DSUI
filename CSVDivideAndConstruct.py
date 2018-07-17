@@ -12,6 +12,9 @@ from collections import Counter
 import lxml.objectify as obj
 import lxml.etree as etree
 
+chars_to_remove = ['/', '?', '%', '*', ':', '|', '"', '<', '>', '.']  # caracteres a serem filtrados em file names
+csv_folder = '../Data Science/output_csvs/'
+
 
 def get_sets_list(some_url):        # function que recebe url e devolve lista de triplas (url, setspec, setname)
     triples_list = []               # inicializa lista de triplas
@@ -35,39 +38,37 @@ def get_sets_list(some_url):        # function que recebe url e devolve lista de
 try:
     source = codecs.open('CollectionPeriodicosList.csv', 'r', 'utf-8-sig')      # abre csv para leitura
 except IOError:
-    print 'Erro ao abrir IbictExtract.csv'
+    print 'Erro ao abrir arquivo para extrair'
 else:
     line_list = source.readlines()                                  # bufferiza csv
     source.close()                                                  # fecha csv
-    setNameList = Counter()
-
-    with open('xml_error_log.txt', 'w') as errors:  # txt para escrever log de erros
-        csv_folder = '../Data Science/output_csvs/'
-        print 'Begin of extraction:', len(line_list)-1, 'URLs to extract'
-        for j in range(1, len(line_list)):                                  # percorre linhas do csv bufferizado
+    setNameList = Counter()                                         # inicializa dict para contagem dos assuntos
+    with open('xml_error_log.txt', 'w') as errors:                  # txt para escrever log de erros
+        print 'Begin of extraction:', len(line_list)-1, 'URLs to go'
+        for j in range(1, len(line_list)):                          # percorre linhas do csv bufferizado
+            url = line_list[j].split('\t')[0]                       # extrai url da linha de csv
+            print j, ': Extracting from: %s' % url
             try:
-                url = line_list[j].split('\t')[0]           # extrai url da linha de csv
-                # abre csv de output para escrita:
-                print j, ': Extracting from: %s' % url
-                set_list = get_sets_list(url)               # set_list <- lista de triplas (url, setspec, setname)
+                set_list = get_sets_list(url)               # set_list <- lista de triplas (url, setspec, setname
                 if set_list:                                # trata lista caso ela exista
                     for a_set in set_list:                  # trata cada tripla para escrita no csv de output
                         csv_name = '%s' % a_set[2]
-                        chars_to_remove = ['/', '\\', '?', '%', '*', ':', '|', '"', '<', '>', '.']
                         for char in chars_to_remove:
                             csv_name = csv_name.replace(char, '-')
+                        csv_name += '.csv'
                         setNameList[a_set[2]] += 1
+                        # abre csv de output para escrita:
                         if setNameList[a_set[2]] > 1:
                             output_csv = codecs.open(csv_folder + csv_name, 'a', 'utf-8-sig')
                             output_csv.write('%s\t%s\n' % (a_set[0], a_set[1]))
                             output_csv.close()
                         else:
                             output_csv = codecs.open(csv_folder + csv_name, 'w', 'utf-8-sig')
-                            output_csv.write('request\tSetSpec\n')  # escreve headers
+                            output_csv.write('request\tSetSpec\n')                  # escreve headers
                             output_csv.write('%s\t%s\n' % (a_set[0], a_set[1]))
-                            output_csv.close()                  # fecha csv de output
+                            output_csv.close()                                      # fecha csv de output
 
-            except requests.ReadTimeout:                        # tratamento de exceptions
+            except requests.ReadTimeout:                                            # tratamento de exceptions
                 print 'Connection timeout with %s' % url
                 errors.write('Connection timeout with %s\n' % url)
             except requests.exceptions.ConnectionError:
@@ -77,12 +78,12 @@ else:
                 print 'Missing schema on %s\nConnection aborted.' % url
                 errors.write('Missing schema on %s\n' % url)
             except requests.exceptions.InvalidSchema:
-                print 'No connection adapters found for %s.\n Check url for errors.' % url
+                print 'No connection adapters found for %s.\n Check url for errors:' % url
                 errors.write('Connection error with: %s\n' % url)
 
+    errors.close()                                                                  # fecha log de erros
     ocurrence_counter = codecs.open('SetNameOcurrences.txt', 'w', 'utf-8-sig')
     for item in setNameList:
         ocurrence_counter.write('%s - %d\n' % (item, setNameList[item]))
     ocurrence_counter.close()
-    errors.close()                                          # fecha log de erros
 print 'Extraction successfully finished'
