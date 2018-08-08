@@ -3,7 +3,8 @@
 Created on Thu Sep  1 08:14:45 2016
 Edited on Wed May 23 16:43:00 2018
 
-@author: alexandresemeler
+@author: Alexandre Ribas Semeler
+@author: Adilson Luiz Pinto 
 @author: Arthur L. Oliveira
 """
 
