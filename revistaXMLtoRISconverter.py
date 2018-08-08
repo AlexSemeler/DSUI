@@ -1,0 +1,81 @@
+# -*- coding: utf-8 -*-
+"""
+Created on Aug 07 2018
+
+@author: Arthur L. Oliveira
+"""
+
+from codecs import open
+from os import path
+from glob import glob
+import lxml.objectify as obj
+import lxml.etree as xml_tree
+
+
+def write_an_item(a_list, list_index, a_file):                  # recebe lista, index e arquivo
+    if a_list[list_index] != '':                                # se o item indicado pelo index existir na lista
+        a_file.write('%s\n' % a_list[list_index])               # escreve item no arquivo
+
+
+def write_a_list(a_list, list_index, a_file):                       # recebe lista, index e arquivo
+    if a_list[list_index]:                                          # se o item indicado pelo index existir na lista
+        for k in a_list[list_index]:                                # percorre a lista
+            a_file.write('%s\n' % k)                                # escreve itens na lista
+
+
+xml_folder = '../Data Science/dados/revistas'                               # caminho do sistema para a pasta de xmls
+aux_tag_dict = {'date': 'DA', 'title': 'TI', 'language': 'LA', 'publisher': 'PB',
+                'identifier': 'DO', 'source': 'SN'}
+output_file = open('output_revistas.ris', 'w', 'utf-8-sig')          # abre novo arquivo csv para escrita
+xml_record_counters = {}                                    # instancia um dict para os contar registros em cada xml
+
+for filename in glob(path.join(xml_folder, '*.xml')):                   # percorre a pasta apontada por path
+
+    short_name = filename[:].split('\\')[-1].replace('.dc.xml', '')     # auxiliar para o nome dos arquivos
+    xml_record_counters[short_name] = 0                         # inicializa lista de contadores de registro dos xml
+    print('parsing: %s' % short_name)
+
+    an_xml = open(filename, 'r')                    # abre os arquivos xml um a um
+    try:                                            # try utilizado para prevenir parada por erros no arquivo
+        tree = obj.fromstring(an_xml.read())        # tree <- xml após parsing
+        an_xml.close()                              # fecha o xml após parsing
+    except xml_tree.LxmlSyntaxError:                # informa se o xml estiver corrompido
+        print('file "%s" corrupted: parsing aborted' % short_name)
+        an_xml.close()                              # fecha o xml após parsing
+        continue
+
+    try:
+        for record in tree.record:
+            for element in record.metadata.getchildren():  # getchildren evita o uso dos namespaces
+
+                writing_tuple = ['', '', '', '', '', '', [], []]    # inicializa a tupla de escrita
+
+                for item in element.getchildren():
+                    if 'creator' in item.tag:
+                        writing_tuple[6].append('%s' % 'AU  - ' + item)
+                        continue
+                    if 'subject' in item.tag and item != '':
+                        writing_tuple[7].append('%s' % 'KW  - ' + item)
+                        continue
+                    for key in aux_tag_dict.keys():
+                        if key in item.tag:
+                            writing_tuple[aux_tag_dict.keys().index(key)] = '%s' % aux_tag_dict[key] + '  - ' + \
+                                                                            '%s' % item
+                            break
+                    continue
+                    # tupla preenchida
+
+                output_file.write('TY  - JOUR\n')
+                for i in range(0, 5):
+                    write_an_item(writing_tuple, i, output_file)
+
+                write_a_list(writing_tuple, 6, output_file)
+                write_a_list(writing_tuple, 7, output_file)
+                output_file.write('ER  - \n')
+                xml_record_counters[short_name] += 1        # incrementa contador de registros do xml aberto
+
+    except AttributeError:                                  # informa se o xml estiver sem records
+        print('file "%s" apparently got no records: parsing aborted' % short_name)
+
+output_file.close()                                                         # fecha arquivo ao final do programa
+print 'aprox.', sum(xml_record_counters.values()), 'records on output file'   # informa quantos registros foram escritos
