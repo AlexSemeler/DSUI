@@ -15,11 +15,11 @@
   Site IBICT<br />
   ------------------------------<br />
   Metas:<br />
-  a) descartar dados de referência e serviços de citação extraídos de bases de dados internacionais proprietárias e/ou comerciais<br />
-  como Web of Science da Thompson Scientific, Scopus, Elsevier e etc. <br />
+  a) descartar dados de referência e serviços de citação extraídos de bases de dados internacionais proprietárias e/ou comerciais como
+  a Web of Science da Thompson Scientific, Scopus. <br />
   b) priorizar metadados publicados na web por universidades e ou institutos de pesquisa no Brasil;<br />
   c) representar metadados de coleções de artigos, dissertações e teses;<br />
-  d) automatizar os processos metodológicos via scripts em Python e softwres de manipulação de dados (open Refine);<br />
+  d) automatizar os processos metodológicos via scripts em Python e softwares de manipulação de dados (open Refine);<br />
   e) reunir conteúdo extraído de diversas fontes para formar uma coleção temática</p>
 <p>Processo de Pesquisa </p>
 <p>Fase 1 - WEB SCRAPING DE UM SITE FONTE DE LINKS OAI-PMH <br />
