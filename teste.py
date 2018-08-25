@@ -1,5 +1,7 @@
 """
 created on Aug 24 2018
+@author: Alexandre Ribas Semeler
+@author: Adilson Luiz Pinto
 @author: Arthur L. Oliveira
 """
 
